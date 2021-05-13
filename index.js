@@ -65,7 +65,7 @@ function run() {
 
       // Strip encoding extension from filename so we can find the correct mimetype later
       const filename = path.basename(p.path).replace(compressionExtRegex, '');
-      const extension = path.extname(p.path);
+      const extension = path.extname(p.path).replace('.', '');
 
       // Get the correct encoding matching the extension from map
       const contentEncoding = extensionEncodingMap[extension] || undefined;
