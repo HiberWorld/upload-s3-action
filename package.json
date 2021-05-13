@@ -10,15 +10,15 @@
     "package": "ncc build index.js -o dist"
   },
   "dependencies": {
-    "@actions/core": "^1.2.6",
-    "aws-sdk": "^2.641.0",
+    "@actions/core": "^1.2.7",
+    "aws-sdk": "^2.906.0",
     "klaw-sync": "^6.0.0",
-    "mime-types": "^2.1.26",
-    "shortid": "^2.2.15"
+    "mime-types": "^2.1.30",
+    "shortid": "^2.2.16"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.21.1",
-    "prettier": "^1.19.1"
+    "prettier": "^2.3.0"
   },
   "prettier": {
     "singleQuote": true

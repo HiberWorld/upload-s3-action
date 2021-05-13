@@ -31,6 +31,11 @@ const paths = klawSync(SOURCE_DIR, {
   nodir: true
 });
 
+/**
+ * 
+ * @param {S3.PutObjectRequest} params 
+ * @returns 
+ */
 function upload(params) {
   return new Promise(resolve => {
     s3.upload(params, (err, data) => {
@@ -48,13 +53,36 @@ function run() {
     paths.map(p => {
       const fileStream = fs.createReadStream(p.path);
       const bucketPath = path.join(destinationDir, path.relative(sourceDir, p.path));
+
+      // Map extension to compression type
+      // We make the assumption that any files with these extensions are compressed
+      const extensionEncodingMap = {
+        br: 'br',
+        gz: 'gzip'
+      };
+      
+      const compressionExtRegex = new RegExp(`\.(${Object.keys(extensionEncodingMap).join('|')})$`, 'g');
+
+      // Strip encoding extension from filename so we can find the correct mimetype later
+      const filename = path.basename(p.path).replace(compressionExtRegex, '');
+      const extension = path.extname(p.path);
+
+      // Get the correct encoding matching the extension from map
+      const contentEncoding = extensionEncodingMap[extension] || undefined;
+
+      /** @type {S3.PutObjectRequest} */
       const params = {
         Bucket: BUCKET,
         ACL: 'public-read',
         Body: fileStream,
         Key: bucketPath,
-        ContentType: lookup(p.path) || 'text/plain'
+        ContentType: lookup(filename) || 'text/plain',
       };
+
+      if(contentEncoding) {
+        params.ContentEncoding = contentEncoding;
+      }
+      
       return upload(params);
     })
   );
