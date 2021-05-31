@@ -21,6 +21,9 @@ const SOURCE_DIR = core.getInput('source_dir', {
 const DESTINATION_DIR = core.getInput('destination_dir', {
   required: false
 });
+const CACHE_CONTROL = core.getInput('cache_control', {
+  required: false
+});
 
 const s3 = new S3({
   accessKeyId: AWS_KEY_ID,
@@ -81,6 +84,10 @@ function run() {
 
       if(contentEncoding) {
         params.ContentEncoding = contentEncoding;
+      }
+
+      if(CACHE_CONTROL) {
+        params.CacheControl = CACHE_CONTROL;
       }
       
       return upload(params);

@@ -21,6 +21,9 @@ inputs:
     required: false
     default: /
     description: 'destination directory for upload'
+  cache_control:
+    required: false
+    description: 'cache control headers to set for uploaded resources'
 outputs:
   object_key:
     description: 'object key'
